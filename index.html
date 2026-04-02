@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رحلة الذكاء الاصطناعي | التعلم بالمشاعر</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'tajawal': ['Tajawal', 'sans-serif'],
+                        'readex': ['Readex Pro', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#0d1b2a',
+                        secondary: '#1b263b',
+                        accent: '#00d9ff',
+                        warm: '#f4a261',
+                        success: '#2ec4b6',
+                        coral: '#e76f51',
+                        gold: '#e9c46a',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        :root {
+            --bg: #0a0f1a;
+            --bg-secondary: #111827;
+            --fg: #f8fafc;
+            --muted: #94a3b8;
+            --accent: #00d9ff;
+            --accent-warm: #f4a261;
+            --card: rgba(27, 38, 59, 0.7);
+            --border: rgba(255, 255, 255, 0.08);
+            --glow: rgba(0, 217, 255, 0.15);
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            overflow-x: hidden;
+        }
+        
+        /* Background Effects */
+        .bg-mesh {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 20%, rgba(0, 217, 255, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 80%, rgba(244, 162, 97, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 50% at 50% 50%, rgba(46, 196, 182, 0.05) 0%, transparent 60%),
+                linear-gradient(180deg, #0a0f1a 0%, #0d1525 100%);
+        }
+        
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(0, 217, 255, 0.15);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: rgba(244, 162, 97, 0.12);
+            top: 60%;
+            right: 10%;
+            animation-delay: -7s;
+        }
+        
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: rgba(46, 196, 182, 0.1);
+            bottom: 20%;
+            left: 30%;
+            animation-delay: -14s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(20px, 30px) scale(1.02); }
+        }
+        
+        /* Grid Pattern */
+        .grid-pattern {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+        }
+        
+        /* Cards */
+        .glass-card {
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(0, 217, 255, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 217, 255, 0.15);
+            transform: translateY(-4px);
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, #00b4d8 100%);
+            color: var(--primary);
+            font-weight: 700;
+            padding: 14px 32px;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.2) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .btn-primary:hover::before {
+            opacity: 1;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 15px 35px -5px rgba(0, 217, 255, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--fg);
+            font-weight: 600;
+            padding: 12px 28px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-warm);
+            color: var(--accent-warm);
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--success));
+            border-radius: 999px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Section Reveal Animation */
+        .reveal-section {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Stagger Children */
+        .stagger-children > * {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        
+        .stagger-children.visible > *:nth-child(1) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(2) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(3) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(4) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(5) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(6) { transition-delay: 0.6s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(7) { transition-delay: 0.7s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(8) { transition-delay: 0.8s; opacity: 1; transform: translateY(0); }
+        
+        /* Feature Icon */
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        /* Activity Card */
+        .activity-card {
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+        
+        .activity-card:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        /* Quiz Styles */
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 18px 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: right;
+        }
+        
+        .quiz-option:hover:not(.selected):not(.correct):not(.wrong) {
+            background: rgba(0, 217, 255, 0.08);
+            border-color: rgba(0, 217, 255, 0.3);
+            transform: translateX(-4px);
+        }
+        
+        .quiz-option.selected {
+            border-color: var(--accent);
+            background: rgba(0, 217, 255, 0.1);
+        }
+        
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: rgba(46, 196, 182, 0.15);
+            animation: correctPulse 0.5s ease;
+        }
+        
+        .quiz-option.wrong {
+            border-color: var(--coral);
+            background: rgba(231, 111, 81, 0.15);
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+        
+        /* Matching Game */
+        .match-card {
+            aspect-ratio: 1;
+            max-width: 140px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            padding: 12px;
+        }
+        
+        .match-card:hover:not(.matched):not(.selected) {
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+        
+        .match-card.selected {
+            border-color: var(--accent-warm);
+            background: rgba(244, 162, 97, 0.15);
+            transform: scale(1.05);
+        }
+        
+        .match-card.matched {
+            border-color: var(--success);
+            background: rgba(46, 196, 182, 0.2);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        /* Flash Card */
+        .flash-card-inner {
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        
+        .flash-card-front, .flash-card-back {
+            backface-visibility: hidden;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .flash-card.flipped .flash-card-front {
+            transform: rotateY(-180deg);
+        }
+        
+        .flash-card.flipped .flash-card-back {
+            transform: rotateY(0);
+        }
+        
+        .flash-card-back {
+            position: absolute;
+            inset: 0;
+            transform: rotateY(180deg);
+        }
+        
+        /* Emotion Tracker */
+        .emotion-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            background: rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .emotion-btn:hover {
+            transform: scale(1.15);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .emotion-btn.active {
+            border-color: currentColor;
+            transform: scale(1.2);
+            box-shadow: 0 0 30px currentColor;
+        }
+        
+        /* Tab Navigation */
+        .tab-btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .tab-btn:hover {
+            color: var(--fg);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        
+        .tab-btn.active {
+            color: var(--primary);
+            background: var(--accent);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            transform: scale(0.95) translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+        
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem !important;
+            }
+            
+            .section-title {
+                font-size: 1.5rem !important;
+            }
+            
+            .match-card {
+                max-width: 100px;
+                font-size: 11px;
+            }
+            
+            .emotion-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 22px;
+            }
+        }
+        
+        /* Confetti */
+        .confetti-piece {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 200;
+            animation: confettiFall 3s ease-out forwards;
+        }
+        
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+        
+        /* Pulse Ring */
+        .pulse-ring {
+            position: absolute;
+            inset: -4px;
+            border-radius: inherit;
+            border: 2px solid var(--accent);
+            animation: pulseRing 2s infinite;
+            opacity: 0;
+        }
+        
+        @keyframes pulseRing {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+        
+        /* Step Indicator */
+        .step-indicator {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        
+        .step-indicator.completed {
+            background: var(--success);
+            color: var(--primary);
+        }
+        
+        .step-indicator.current {
+            background: var(--accent);
+            color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+        }
+        
+        .step-indicator.pending {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--muted);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Background -->
+    <div class="bg-mesh"></div>
+    <div class="grid-pattern"></div>
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 px-4 py-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="glass-card px-6 py-3 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-success flex items-center justify-center">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                    <span class="font-bold text-lg">AI Learning Hub</span>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-2 bg-white/5 rounded-xl p-1">
+                    <button class="tab-btn active" data-tab="learn">التعلم</button>
+                    <button class="tab-btn" data-tab="activities">الأنشطة</button>
+                    <button class="tab-btn" data-tab="progress">تقدمي</button>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <div id="progressNav" class="hidden sm:flex items-center gap-2 text-sm">
+                        <span class="text-muted">التقدم:</span>
+                        <div class="w-24 progress-container">
+                            <div class="progress-bar" style="width: 0%" id="navProgressBar"></div>
+                        </div>
+                        <span class="font-bold text-accent" id="navProgressText">0%</span>
+                    </div>
+                    
+                    <!-- Emotion Tracker Mini -->
+                    <button id="emotionToggle" class="relative w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all" title="حالة المشاعر">
+                        <span id="currentEmotion" class="text-xl">😊</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-16 px-4">
+        <div class="max-w-7xl mx-auto">
+            
+            <!-- Hero Section -->
+            <section id="heroSection" class="py-12 md:py-20 reveal-section">
+                <div class="text-center max-w-4xl mx-auto stagger-children">
+                    <div class="inline-flex items-center gap-2 badge bg-accent/10 text-accent mb-6">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
+                        </svg>
+                        الجلسة الثانية
+                    </div>
+                    
+                    <h1 class="hero-title text-4xl md:text-6xl font-black mb-6 leading-tight">
+                        <span class="bg-gradient-to-l from-accent via-accent-warm to-gold bg-clip-text text-transparent">
+                            توليد المحتوى والاختبارات
+                        </span>
+                        <br>
+                        <span class="text-fg">بالذكاء الاصطناعي</span>
+                    </h1>
+                    
+                    <p class="text-lg md:text-xl text-muted mb-8 max-w-2xl mx-auto leading-relaxed">
+                        رحلة تعليمية تفاعلية لاكتشاف قدرات ChatGPT وQuiz Gecko في إنشاء محتوى تعليمي مبتكر واختبارات إلكترونية احترافية
+                    </p>
+                    
+                    <div class="flex flex-wrap items-center justify-center gap-4">
+                        <button onclick="scrollToSection('content')" class="btn-primary flex items-center gap-2">
+                            <span>ابدأ الرحلة</span>
+                            <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
+                        </button>
+                        <button onclick="openModal('activitiesModal')" class="btn-secondary flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span>الأنشطة التفاعلية</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
+                        <div class="glass-card p-4 text-center">
+                            <div class="text-3xl font-black text-accent">8</div>
+                            <div class="text-sm text-muted mt-1">مزايا ChatGPT</div>
+                        </div>
+                        <div class="glass-card p-4 text-center">
+                            <div class="text-3xl font-black text-warm">8</div>
+                            <div class="text-sm text-muted mt-1">تنبيهات مهمة</div>
+                        </div>
+                        <div class="glass-card p-4 text-center">
+                            <div class="text-3xl font-black text-success">6</div>
+                            <div class="text-sm text-muted mt-1">أنواع أسئلة</div>
+                        </div>
+                        <div class="glass-card p-4 text-center">
+                            <div class="text-3xl font-black text-gold">5+</div>
+                            <div class="text-sm text-muted mt-1">أنشطة تفاعلية</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Content Section -->
+            <section id="content" class="py-12 reveal-section">
+                <!-- Tabs for Content -->
+                <div class="flex flex-wrap gap-2 mb-8 justify-center">
+                    <button class="tab-btn content-tab active" data-content="intro">التمهيد</button>
+                    <button class="tab-btn content-tab" data-content="chatgpt">ChatGPT</button>
+                    <button class="tab-btn content-tab" data-content="tips">تنبيهات المعلمين</button>
+                    <button class="tab-btn content-tab" data-content="images">توليد الصور</button>
+                    <button class="tab-btn content-tab" data-content="quizgecko">Quiz Gecko</button>
+                </div>
+
+                <!-- Intro Content -->
+                <div id="introContent" class="content-panel">
+                    <div class="glass-card p-8 md:p-12">
+                        <div class="flex items-start gap-4 mb-8">
+                            <div class="feature-icon bg-gradient-to-br from-accent/20 to-accent/5 text-accent shrink-0">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="section-title text-2xl md:text-3xl font-bold mb-3">تمهيد: ثورة ChatGPT</h2>
+                                <p class="text-muted leading-relaxed">اكتشاف كيف غير الذكاء الاصطناعي وجه التعليم الحديث</p>
+                            </div>
+                        </div>
+                        
+                        <div class="prose prose-lg prose-invert max-w-none space-y-6">
+                            <div class="p-6 rounded-2xl bg-gradient-to-l from-accent/10 to-transparent border-r-4 border-accent">
+                                <p class="text-lg leading-relaxed">
+                                    أحدث ريبورت "شات جي بي تي" ثورة في العالم، فلم تتوقع شركة Open AI والتي أسسها إيلون ماسك التي ابتكرت هذه التقنية انتشارها سريعاً عندما أطلقوها كخدمة معاينة بحثية مجانية في نوفمبر 2022.
+                                </p>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6 mt-8">
+                                <div class="p-6 rounded-2xl bg-white/[0.03] border border-white/10">
+                                    <h3 class="font-bold text-lg mb-3 text-accent">ما هو ChatGPT؟</h3>
+                                    <ul class="space-y-3 text-muted">
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-success mt-1">●</span>
+                                            برنامج محادثة أو دردشة روبوتية مشابهة لمحادثات البشر
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-success mt-1">●</span>
+                                            يعتمد على الذكاء الاصطناعي للإجابة على الأسئلة
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-success mt-1">●</span>
+                                            يزود المستخدمين بالمعلومات ويكتب المقالات والأبحاث
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="p-6 rounded-2xl bg-white/[0.03] border border-white/10">
+                                    <h3 class="font-bold text-lg mb-3 text-warm">كيف يعمل؟</h3>
+                                    <ul class="space-y-3 text-muted">
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-warm mt-1">●</span>
+                                            تم تغذيته بنحو 300 مليار كلمة من الإنترنت
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-warm mt-1">●</span>
+                                            نظام آلي يتعامل بشكل مستقل مع المعلومات
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <span class="text-warm mt-1">●</span>
+                                            يستخدم تقنيات التعلم المعزز
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 p-6 rounded-2xl bg-gold/10 border border-gold/20">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <span class="text-2xl">💡</span>
+                                    <h4 class="font-bold text-gold">هل تعلم؟</h4>
+                                </div>
+                                <p class="text-muted">
+                                    يمكن لـ ChatGPT إنتاج كتابات متطورة وذكية للغاية بعد معالجته بكميات ضخمة من البيانات والتفاعل مع المستخدمين من خلال محادثة بما في ذلك الإجابة على الأسئلة حتى المعقدة منها.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-end">
+                            <button onclick="nextContent('chatgpt')" class="btn-primary flex items-center gap-2">
+                                <span>التالي: مزايا ChatGPT</span>
+                                <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ChatGPT Features Content -->
+                <div id="chatgptContent" class="content-panel hidden">
+                    <div class="glass-card p-8 md:p-12">
+                        <div class="flex items-start gap-4 mb-8">
+                            <div class="feature-icon bg-gradient-to-br from-success/20 to-success/5 text-success shrink-0">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="section-title text-2xl md:text-3xl font-bold mb-3">مزايا تطبيق المساعد الشخصي الذكي</h2>
+                                <p class="text-muted">اكتشف القوى العظيمة التي يجعلها ChatGPT أفضل مساعد شخصي ذكي</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8" id="featuresGrid">
+                            <!-- Features will be rendered by JS -->
+                        </div>
+                        
+                        <!-- Registration Steps -->
+                        <div class="mt-12 pt-8 border-t border-white/10">
+                            <h3 class="text-xl font-bold mb-6 flex items-center gap-3">
+                                <span class="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center text-accent">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                                    </svg>
+                                </span>
+                                خطوات التسجيل في ChatGPT
+                            </h3>
+                            
+                            <div class="space-y-4" id="registrationSteps">
+                                <!-- Steps will be rendered by JS -->
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-between">
+                            <button onclick="nextContent('intro')" class="btn-secondary flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                </svg>
+                                <span>السابق</span>
+                            </button>
+                            <button onclick="nextContent('tips')" class="btn-primary flex items-center gap-2">
+                                <span>التالي: تنبيهات المعلمين</span>
+                                <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips Content -->
+                <div id="tipsContent" class="content-panel hidden">
+                    <div class="glass-card p-8 md:p-12">
+                        <div class="flex items-start gap-4 mb-8">
+                            <div class="feature-icon bg-gradient-to-br from-warm/20 to-warm/5 text-warm shrink-0">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="section-title text-2xl md:text-3xl font-bold mb-3">تنبيهات مهمة للمعلمين</h2>
+                                <p class="text-muted">8 نصائح ذهبية للاستفادة القصوى من ChatGPT في توليد المحتوى التعليمي</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4" id="tipsContainer">
+                            <!-- Tips will be rendered by JS -->
+                        </div>
+                        
+                        <div class="mt-8 p-6 rounded-2xl bg-accent/10 border border-accent/20">
+                            <h4 class="font-bold text-accent mb-3 flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                ما هي المطالبة (Prompt)؟
+                            </h4>
+                            <p class="text-muted leading-relaxed">
+                                المطالبة عبارة عن عبارة قصيرة أو جملة تخبر الذكاء الاصطناعي بما يجب أن يكتب عنه. على سبيل المثال، إذا أردنا من النموذج أن يكتب قصة، فيمكننا أن نعطيه مطالبة مثل "ذات مرة في أرض بعيدة..."
+                            </p>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-between">
+                            <button onclick="nextContent('chatgpt')" class="btn-secondary flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                </svg>
+                                <span>السابق</span>
+                            </button>
+                            <button onclick="nextContent('images')" class="btn-primary flex items-center gap-2">
+                                <span>التالي: توليد الصور</span>
+                                <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Images Content -->
+                <div id="imagesContent" class="content-panel hidden">
+                    <div class="glass-card p-8 md:p-12">
+                        <div class="flex items-start gap-4 mb-8">
+                            <div class="feature-icon bg-gradient-to-br from-coral/20 to-coral/5 text-coral shrink-0">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="section-title text-2xl md:text-3xl font-bold mb-3">توليد الصور بالذكاء الاصطناعي</h2>
+                                <p class="text-muted">صمم غلاف دروس ومذكرات واختبارات بطريقة احترافية وبأقل مجهود</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-8 mt-8">
+                            <div class="space-y-6">
+                                <div class="p-6 rounded-2xl bg-white/[0.03] border border-white/10">
+                                    <h3 class="font-bold text-lg mb-4 text-coral">ما يمكنك تصميمه؟</h3>
+                                    <ul class="space-y-3">
+                                        <li class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                            <span class="w-8 h-8 rounded-lg bg-coral/20 flex items-center justify-center text-coral text-sm">1</span>
+                                            <span>غلاف لدرس معين</span>
+                                        </li>
+                                        <li class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                            <span class="w-8 h-8 rounded-lg bg-coral/20 flex items-center justify-center text-coral text-sm">2</span>
+                                            <span>صور توضيحية للتهيئة العامة</span>
+                                        </li>
+                                        <li class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                            <span class="w-8 h-8 rounded-lg bg-coral/20 flex items-center justify-center text-coral text-sm">3</span>
+                                            <span>غلاف مذكرة شرح</span>
+                                        </li>
+                                        <li class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                            <span class="w-8 h-8 rounded-lg bg-coral/20 flex items-center justify-center text-coral text-sm">4</span>
+                                            <span>غلاف اختبار موضوع معين</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="p-6 rounded-2xl bg-gold/10 border border-gold/20">
+                                    <h4 class="font-bold text-gold mb-3">كيف تستخدمه؟</h4>
+                                    <ol class="space-y-2 text-muted">
+                                        <li class="flex gap-2"><span class="text-gold">1.</span> تخيل التصميم في ذهنك</li>
+                                        <li class="flex gap-2"><span class="text-gold">2.</span> أخبر ChatGPT بالفكرة العامة</li>
+                                        <li class="flex gap-2"><span class="text-gold">3.</span> سيصمم لك الصورة في ثوانٍ</li>
+                                        <li class="flex gap-2"><span class="text-gold">4.</span> اطلب التعديل حتى تصل للنتيجة المرجوة</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            
+                            <div class="relative">
+                                <div class="aspect-square rounded-3xl bg-gradient-to-br from-coral/20 via-warm/10 to-accent/20 border border-white/10 flex items-center justify-center overflow-hidden">
+                                    <div class="text-center p-8">
+                                        <div class="text-6xl mb-4">🎨</div>
+                                        <p class="text-lg font-medium mb-2">تخيل أي مشهد...</p>
+                                        <p class="text-sm text-muted">حتى لو كان خيالياً!</p>
+                                        <div class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-sm">
+                                            <svg class="w-4 h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                            </svg>
+                                            جاهز في ثوانٍ معدودة
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 p-6 rounded-2xl bg-white/[0.03] border border-white/10">
+                            <h4 class="font-bold mb-4">تعديل المحتوى المولد</h4>
+                            <p class="text-muted mb-4">يمكنك تعديل المحتوى المولد بعدة طرق:</p>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="badge bg-accent/10 text-accent">تغيير طريقة السؤال</span>
+                                <span class="badge bg-success/10 text-success">كتابة "المزيد"</span>
+                                <span class="badge bg-warm/10 text-warm">كتابة "هذا ليس كافياً"</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-between">
+                            <button onclick="nextContent('tips')" class="btn-secondary flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                </svg>
+                                <span>السابق</span>
+                            </button>
+                            <button onclick="nextContent('quizgecko')" class="btn-primary flex items-center gap-2">
+                                <span>التالي: Quiz Gecko</span>
+                                <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QuizGecko Content -->
+                <div id="quizgeckoContent" class="content-panel hidden">
+                    <div class="glass-card p-8 md:p-12">
+                        <div class="flex items-start gap-4 mb-8">
+                            <div class="feature-icon bg-gradient-to-br from-gold/20 to-gold/5 text-gold shrink-0">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="section-title text-2xl md:text-3xl font-bold mb-3">Quiz Gecko - صانع الاختبارات الذكي</h2>
+                                <p class="text-muted">أداة ذكاء اصطناعي توليدية لإنشاء اختبارات إلكترونية احترافية</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Key Info -->
+                        <div class="grid md:grid-cols-3 gap-4 mb-8">
+                            <div class="p-5 rounded-2xl bg-success/10 border border-success/20 text-center">
+                                <div class="text-3xl mb-2">🆓</div>
+                                <div class="font-bold text-success">مجاني</div>
+                                <div class="text-sm text-muted">حتى 3 اختبارات شهرياً</div>
+                            </div>
+                            <div class="p-5 rounded-2xl bg-accent/10 border border-accent/20 text-center">
+                                <div class="text-3xl mb-2">$18</div>
+                                <div class="font-bold text-accent">اشتراك مدفوع</div>
+                                <div class="text-sm text-muted">شهرياً للاستخدام غير محدود</div>
+                            </div>
+                            <div class="p-5 rounded-2xl bg-warm/10 border border-warm/20 text-center">
+                                <div class="text-3xl mb-2">⚡</div>
+                                <div class="font-bold text-warm">توفير الوقت</div>
+                                <div class="text-sm text-muted">ساعات تصبح دقائق</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Question Types -->
+                        <div class="mb-8">
+                            <h3 class="text-xl font-bold mb-4">أنواع الأسئلة المتاحة</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3" id="questionTypes">
+                                <!-- Will be rendered by JS -->
+                            </div>
+                        </div>
+                        
+                        <!-- Input Methods -->
+                        <div class="mb-8">
+                            <h3 class="text-xl font-bold mb-4">طرق إدخال المحتوى</h3>
+                            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4" id="inputMethods">
+                                <!-- Will be rendered by JS -->
+                            </div>
+                        </div>
+                        
+                        <!-- Settings Preview -->
+                        <div class="p-6 rounded-2xl bg-white/[0.03] border border-white/10">
+                            <h3 class="font-bold text-lg mb-4">إعدادات متقدمة</h3>
+                            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                                <div class="flex items-center gap-2 p-3 rounded-xl bg-white/5">
+                                    <input type="checkbox" checked disabled class="w-4 h-4 accent-accent">
+                                    <span>منع إعادة المحاولة</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-3 rounded-xl bg-white/5">
+                                    <input type="checkbox" checked disabled class="w-4 h-4 accent-accent">
+                                    <span>ترتيب عشوائي للأسئلة</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-3 rounded-xl bg-white/5">
+                                    <input type="checkbox" checked disabled class="w-4 h-4 accent-accent">
+                                    <span>إخفاء الإجابات الصحيحة</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-3 rounded-xl bg-white/5">
+                                    <input type="checkbox" disabled class="w-4 h-4 accent-accent">
+                                    <span>إخفاء التقرير النهائي</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-3 rounded-xl bg-white/5">
+                                    <input type="checkbox" checked disabled class="w-4 h-4 accent-accent">
+                                    <span>تحديد وقت الاختبار</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-3 rounded-xl bg-white/5">
+                                    <input type="checkbox" checked disabled class="w-4 h-4 accent-accent">
+                                    <span>جدولة فتح وإغلاق</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-between">
+                            <button onclick="nextContent('images')" class="btn-secondary flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                </svg>
+                                <span>السابق</span>
+                            </button>
+                            <button onclick="openModal('activitiesModal')" class="btn-primary flex items-center gap-2">
+                                <span>اختبر نفسك الآن</span>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activities Quick Access -->
+            <section class="py-12 reveal-section">
+                <h2 class="section-title text-2xl md:text-3xl font-bold text-center mb-8">الأنشطة التفاعلية</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" id="activitiesGrid">
+                    <!-- Activities will be rendered by JS -->
+                </div>
+            </section>
+
+            <!-- Progress Section -->
+            <section id="progressSection" class="py-12 reveal-section hidden">
+                <div class="glass-card p-8 md:p-12">
+                    <h2 class="section-title text-2xl md:text-3xl font-bold mb-8 text-center">تقدمك التعليمي</h2>
+                    
+                    <div class="max-w-2xl mx-auto">
+                        <div class="mb-8">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">إجمالي التقدم</span>
+                                <span class="font-bold text-accent" id="totalProgressText">0%</span>
+                            </div>
+                            <div class="progress-container h-4">
+                                <div class="progress-bar" id="totalProgressBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4" id="progressItems">
+                            <!-- Progress items will be rendered by JS -->
+                        </div>
+                        
+                        <div class="mt-8 p-6 rounded-2xl bg-gradient-to-l from-accent/10 to-success/10 border border-accent/20 text-center">
+                            <div class="text-4xl mb-2" id="achievementEmoji">🌟</div>
+                            <h3 class="font-bold text-lg mb-1" id="achievementTitle">ابدأ رحلتك!</h3>
+                            <p class="text-sm text-muted" id="achievementDesc"> أكمل الأنشطة لفتح إنجازات جديدة</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Activities Modal -->
+    <div id="activitiesModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-content">
+            <div class="p-6 border-b border-white/10 flex items-center justify-between sticky top-0 bg-bg-secondary z-10">
+                <h2 id="modalTitle" class="text-xl font-bold">الأنشطة التفاعلية</h2>
+                <button onclick="closeModal('activitiesModal')" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors" aria-label="إغلاق">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="p-6" id="modalBody">
+                <!-- Modal content will change based on activity -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Emotion Tracker Modal -->
+    <div id="emotionModal" class="modal-overlay" role="dialog" aria-modal="true">
+        <div class="modal-content max-w-md">
+            <div class="p-6 border-b border-white/10 flex items-center justify-between">
+                <h2 class="text-xl font-bold">كيف تشعر الآن؟</h2>
+                <button onclick="closeModal('emotionModal')" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors" aria-label="إغلاق">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="p-8">
+                <p class="text-center text-muted mb-6">اختر المشاعر التي تعكس حالتك الحالية</p>
+                <div class="flex justify-center gap-4 flex-wrap" id="emotionButtons">
+                    <!-- Emotion buttons will be rendered by JS -->
+                </div>
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-muted">المشاعر المختارة تساعدنا في تحسين تجربة التعلم الخاصة بك</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-8 px-4 border-t border-white/5">
+        <div class="max-w-7xl mx-auto text-center text-muted text-sm">
+            <p>منصة التعلم بالمشاعر - الجلسة الثانية: توليد المحتوى والاختبارات بالذكاء الاصطناعي</p>
+        </div>
+    </footer>
+
+    <script>
+        // ==================== DATA ====================
+        const featuresData = [
+            { icon: '🧠', title: 'الحفاظ على السياق', desc: 'تحسين وإدارة سياق المحادثات باستجابات أكثر تماسكاً', color: 'accent' },
+            { icon: '❓', title: 'معالجة الغموض', desc: 'طرح أسئلة توضيحية لتحسين تجربة المستفيدين', color: 'success' },
+            { icon: '🎯', title: 'التخصيص', desc: 'تجارب مخصصة بناءً على التفضيلات الفردية والاهتمامات', color: 'warm' },
+            { icon: '🔍', title: 'التفكير المنطقي', desc: 'استجابات دقيقة لحل المشكلات المعقدة', color: 'coral' },
+            { icon: '💝', title: 'الذكاء العاطفي', desc: 'الاستجابة لمشاعر وطلبات المستفيدين', color: 'pink' },
+            { icon: '📊', title: 'النمذجة المعرفية', desc: 'استشارات مهنية في مجالات مثل الطب والتعليم', color: 'gold' },
+            { icon: '📝', title: 'الكتابة الاحترافية', desc: 'إنشاء مقالات وأبحاث ومحتوى تعليمي', color: 'success' },
+            { icon: '💻', title: 'البرمجة والمساعدة التقنية', desc: 'كتابة الأكواد وحل المشكلات البرمجية', color: 'accent' }
+        ];
+
+        const registrationStepsData = [
+            { step: 1, text: 'الدخول على متجر جوجل أو البحث عن CHAT GPT في المتصفح' },
+            { step: 2, text: 'البحث عن تطبيق ChatGPT التابع لـ OpenAI' },
+            { step: 3, text: 'تنزيل التطبيق على الهاتف أو الحاسب' },
+            { step: 4, text: 'اختيار طريقة التسجيل (جوجل أو مايكروسوفت)' },
+            { step: 5, text: 'كتابة البريد الإلكتروني وتأكيده برقم الهاتف' },
+            { step: 6, text: 'كتابة الرقم السري وتأكيده' },
+            { step: 7, text: 'إجراء اختبار التحقق من أنك لست روبوت' },
+            { step: 8, text: 'فتح التطبيق والبدء في الاستخدام' }
+        ];
+
+        const tipsData = [
+            { num: 1, title: 'البحث في وجهات نظر مختلفة', desc: 'اطلب منه مناقشة عكس وجهة نظرك أو إعادة صياغتها لتلاميذك', icon: '🔄' },
+            { num: 2, title: 'العصف الذهني للخطوط العريضة', desc: 'استخدم ChatGPT لهيكلة ومناقشة مخططات المحتوى كمحرر ذكي', icon: '💡' },
+            { num: 3, title: 'تلخيص المحتوى', desc: 'تلخيص منشورات الكتب التعليمية ومصادر مثل بنك المعرفة المصري', icon: '📚' },
+            { num: 4, title: 'صياغة المحتوى', desc: 'كتابة مسودات كاملة لرسائل وإعلانات بمجرد إعطائه الفكرة', icon: '✍️' },
+            { num: 5, title: 'إعادة استخدام المحتوى', desc: 'إعادة كتابة المحتوى ليكون منشوراً فعالاً على مختلف المنصات', icon: '♻️' },
+            { num: 6, title: 'كتابة مقترحات المشاريع', desc: 'إنشاء مقترحات لمشاريع تعليمية أو تجارية مختلفة', icon: '📋' },
+            { num: 7, title: 'تنظيم العمل حسب المواضيع', desc: 'إنشاء محادثات جديدة لكل موضوع بالنقر على New chat', icon: '📁' },
+            { num: 8, title: 'تقديم الملاحظات والتعديل', desc: 'اطب إعادة الكتابة بتنسيق أكثر احترافية حتى تحصل على المحتوى المطلوب', icon: '✨' }
+        ];
+
+        const questionTypesData = [
+            { name: 'Multiple Choice', icon: '🔘', desc: 'اختيار من متعدد' },
+            { name: 'True/False', icon: '✅', desc: 'صح أو خطأ' },
+            { name: 'Short Answer', icon: '📝', desc: 'إجابة قصيرة' },
+            { name: 'Fill in Blank', icon: '▭▭▭', desc: 'أكمل الفراغ' },
+            { name: 'Matching', icon: '🔗', desc: 'توصيل' },
+            { name: 'Mix It', icon: '🎲', desc: 'خلط الكل' }
+        ];
+
+        const inputMethodsData = [
+            { name: 'Upload', icon: '📁', desc: 'تحميل ملف PDF/DOC/PPT' },
+            { name: 'Text', icon: '📄', desc: 'نص جاهز' },
+            { name: 'YouTube', icon: '▶️', desc: 'رابط فيديو' },
+            { name: 'Subject', icon: '📚', desc: 'عنوان الموضوع' },
+            { name: 'Import', icon: '📥', desc: 'استيراد أسئلة' },
+            { name: 'Link', icon: '🔗', desc: 'رابط موقع' },
+            { name: 'Quizlet', icon: '🗂️', desc: 'مجموعة Quizlet' },
+            { name: 'Manual', icon: '✋', desc: 'يدوياً' }
+        ];
+
+        const activitiesData = [
+            { id: 'quiz', title: 'اختبار تفاعلي', icon: '🎯', desc: 'اختبر معلوماتك عن ChatGPT وQuiz Gecko', color: 'accent' },
+            { id: 'matching', title: 'لعبة المطابقة', icon: '🔗', desc: 'طابق المصطلحات مع تعريفها', color: 'success' },
+            { id: 'flashcards', title: 'بطاقات تعليمية', icon: '🃏', desc: 'راجع المعلومات بطريقة ممتعة', color: 'warm' },
+            { id: 'sorting', title: 'رتّب الخطوات', icon: '📋', desc: 'رتّب خطوات التسجيل بالترتيب الصحيح', color: 'gold' }
+        ];
+
+        const quizQuestions = [
+            {
+                question: 'من أسس شركة OpenAI التي طورت ChatGPT؟',
+                options: ['بيل غيتس', 'إيلون ماسك', 'جيف بيزوس', 'مارك زوكربيرج'],
+                correct: 1
+            },
+            {
+                question: 'متى تم إطلاق ChatGPT كخدمة مجانية؟',
+                options: ['يناير 2022', 'نوفمبر 2022', 'مارس 2023', 'يونيو 2023'],
+                correct: 1
+            },
+            {
+                question: 'كم مليون كلمة تم تغذية الروبوت بها تقريباً؟',
+                options: ['100 مليون', '200 مليون', '300 مليون', '500 مليون'],
+                correct: 2
+            },
+            {
+                question: 'ما هو اسم المطالبة التي نعطيها للذكاء الاصطناعي؟',
+                options: ['Command', 'Prompt', 'Query', 'Request'],
+                correct: 1
+            },
+            {
+                question: 'كم اختبار مجاني يمكن إنشاؤه شهرياً في Quiz Gecko؟',
+                options: ['1 اختبار', '3 اختبارات', '5 اختبارات', 'غير محدود'],
+                correct: 1
+            },
+            {
+                question: 'أي مما يلي ليس نوعاً من أنواع الأسئلة في Quiz Gecko؟',
+                options: ['Multiple Choice', 'Essay', 'Fill in the Blank', 'True/False'],
+                correct: 1
+            }
+        ];
+
+        const matchingPairs = [
+            { term: 'Prompt', def: 'المطالبة' },
+            { term: 'OpenAI', def: 'الشركة المطورة' },
+            { term: 'Quiz Gecko', def: 'صانع الاختبارات' },
+            { term: 'AI', def: 'الذكاء الاصطناعي' },
+            { term: 'LMS', def: 'نظام إدارة التعلم' },
+            { term: 'PDF', def: 'صيغة ملفات' }
+        ];
+
+        const flashcardsData = [
+            { front: 'ما هو ChatGPT؟', back: 'برنامج محادثة روبوتية يعتمد على الذكاء الاصطناعي للإجابة على الأسئلة وكتابة المحتوى' },
+            { front: 'ما فائدة العصف الذهني؟', back: 'يساعد في هيكلة ومناقشة مخططات المحتوى ويمنح توجيه للأفكار' },
+            { front: 'كيف تولد صورة بالذكاء الاصطناعي؟', back: 'تخيل التصميم وأخبر ChatGPT بالفكرة العامة وسينفذها في ثوانٍ' },
+            { front: 'ما هي تكلفة Quiz Gecko المدفوعة؟', back: 'تبدأ من 18 دولاراً أمريكياً شهرياً' },
+            { front: 'ما أنواع الملفات المدعومة في Quiz Gecko؟', back: 'PDF, DOC, PPT بالإضافة للروابط والنصوص والفيديوهات' }
+        ];
+
+        const emotionsData = [
+            { emoji: '😊', label: 'سعيد', color: '#f4a261' },
+            { emoji: '😃', label: 'متحمس', color: '#e9c46a' },
+            { emoji: '😐', label: 'محايد', color: '#94a3b8' },
+            { emoji: '😟', label: 'مرتبك', color: '#00d9ff' },
+            { emoji: '😴', label: 'متعب', color: '#778da9' },
+            { emoji: '😤', title: 'محبط', color: '#e76f51' }
+        ];
+
+        // ==================== STATE ====================
+        let state = {
+            currentEmotion: '😊',
+            progress: {
+                intro: false,
+                chatgpt: false,
+                tips: false,
+                images: false,
+                quizgecko: false,
+                quiz: 0,
+                matching: 0,
+                flashcards: 0,
+                sorting: 0
+            },
+            quizState: {
+                currentQuestion: 0,
+                score: 0,
+                answers: []
+            },
+            matchingState: {
+                selected: null,
+                matches: [],
+                attempts: 0
+            },
+            flashcardState: {
+                currentIndex: 0,
+                flipped: false
+            }
+        };
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            initFeatures();
+            initRegistrationSteps();
+            initTips();
+            initQuestionTypes();
+            initInputMethods();
+            initActivities();
+            initEmotions();
+            initTabs();
+            initScrollReveal();
+            loadProgress();
+            updateProgressUI();
+        });
+
+        // ==================== RENDER FUNCTIONS ====================
+        function initFeatures() {
+            const container = document.getElementById('featuresGrid');
+            if (!container) return;
+            container.innerHTML = featuresData.map((f, i) => `
+                <div class="glass-card p-6 activity-card group" style="--delay: ${i * 0.1}s">
+                    <div class="feature-icon bg-${f.color}/20 text-${f.color} group-hover:scale-110 transition-transform">
+                        ${f.icon}
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">${f.title}</h3>
+                    <p class="text-sm text-muted">${f.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function initRegistrationSteps() {
+            const container = document.getElementById('registrationSteps');
+            if (!container) return;
+            container.innerHTML = registrationStepsData.map((s, i) => `
+                <div class="flex items-start gap-4 p-4 rounded-2xl bg-white/[0.03] hover:bg-white/5 transition-colors">
+                    <div class="step-indicator ${i === 0 ? 'current' : 'pending'} shrink-0">${s.step}</div>
+                    <p class="pt-2">${s.text}</p>
+                </div>
+            `).join('');
+        }
+
+        function initTips() {
+            const container = document.getElementById('tipsContainer');
+            if (!container) return;
+            container.innerHTML = tipsData.map((t, i) => `
+                <div class="glass-card p-6 activity-card group" style="animation-delay: ${i * 0.1}s">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-warm/20 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
+                            ${t.icon}
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="badge bg-warm/10 text-warm">نصيحة ${t.num}</span>
+                                <h3 class="font-bold">${t.title}</h3>
+                            </div>
+                            <p class="text-muted">${t.desc}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function initQuestionTypes() {
+            const container = document.getElementById('questionTypes');
+            if (!container) return;
+            container.innerHTML = questionTypesData.map(q => `
+                <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 text-center hover:border-accent/50 transition-colors cursor-pointer">
+                    <div class="text-2xl mb-2">${q.icon}</div>
+                    <div class="font-semibold text-sm">${q.name}</div>
+                    <div class="text-xs text-muted mt-1">${q.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        function initInputMethods() {
+            const container = document.getElementById('inputMethods');
+            if (!container) return;
+            container.innerHTML = inputMethodsData.map(m => `
+                <div class="p-5 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-success/50 transition-colors cursor-pointer group">
+                    <div class="text-3xl mb-3 group-hover:scale-110 transition-transform inline-block">${m.icon}</div>
+                    <div class="font-bold">${m.name}</div>
+                    <div class="text-sm text-muted">${m.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        function initActivities() {
+            const container = document.getElementById('activitiesGrid');
+            if (!container) return;
+            container.innerHTML = activitiesData.map(a => `
+                <div class="glass-card activity-card p-6 text-center" onclick="openActivity('${a.id}')">
+                    <div class="w-16 h-16 rounded-2xl bg-${a.color}/20 flex items-center justify-center text-3xl mx-auto mb-4">
+                        ${a.icon}
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">${a.title}</h3>
+                    <p class="text-sm text-muted">${a.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function initEmotions() {
+            const container = document.getElementById('emotionButtons');
+            if (!container) return;
+            container.innerHTML = emotionsData.map(e => `
+                <button class="emotion-btn" data-emotion="${e.emoji}" style="color: ${e.color}" onclick="selectEmotion('${e.emoji}', '${e.color}')" title="${e.label}">
+                    ${e.emoji}
+                </button>
+            `).join('');
+        }
+
+        // ==================== TABS & NAVIGATION ====================
+        function initTabs() {
+            // Main navigation tabs
+            document.querySelectorAll('[data-tab]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-tab]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const tab = btn.dataset.tab;
+                    if (tab === 'learn') {
+                        scrollToSection('content');
+                    } else if (tab === 'activities') {
+                        openModal('activitiesModal');
+                    } else if (tab === 'progress') {
+                        showProgressSection();
+                    }
+                });
+            });
+
+            // Content tabs
+            document.querySelectorAll('.content-tab').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    switchContentPanel(btn.dataset.content);
+                });
+            });
+        }
+
+        function switchContentPanel(panelId) {
+            document.querySelectorAll('.content-tab').forEach(b => b.classList.remove('active'));
+            document.querySelector(`[data-content="${panelId}"]`).classList.add('active');
+            
+            document.querySelectorAll('.content-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`${panelId}Content`).classList.remove('hidden');
+            
+            state.progress[panelId] = true;
+            saveProgress();
+            updateProgressUI();
+        }
+
+        function nextContent(nextPanel) {
+            switchContentPanel(nextPanel);
+            scrollToSection('content');
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // ==================== MODALS ====================
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            if (id === 'activitiesModal') {
+                renderActivitiesList();
+            }
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(m => {
+                    m.classList.remove('active');
+                });
+                document.body.style.overflow = '';
+            }
+        });
+
+        // ==================== ACTIVITIES ====================
+        function renderActivitiesList() {
+            const body = document.getElementById('modalBody');
+            body.innerHTML = `
+                <div class="grid gap-4">
+                    ${activitiesData.map(a => `
+                        <button onclick="openActivity('${a.id}'); closeModal('activitiesModal');" 
+                                class="w-full p-5 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-${a.color}/50 transition-all text-right flex items-center gap-4 group">
+                            <div class="w-14 h-14 rounded-xl bg-${a.color}/20 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
+                                ${a.icon}
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-lg">${a.title}</h3>
+                                <p class="text-sm text-muted">${a.desc}</p>
+                            </div>
+                            <svg class="w-5 h-5 text-muted group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function openActivity(activityId) {
+            const modal = document.getElementById('activitiesModal');
+            const body = document.getElementById('modalBody');
+            const title = document.getElementById('modalTitle');
+            
+            switch(activityId) {
+                case 'quiz':
+                    title.textContent = 'اختبار تفاعلي';
+                    renderQuiz(body);
+                    break;
+                case 'matching':
+                    title.textContent = 'لعبة المطابقة';
+                    renderMatchingGame(body);
+                    break;
+                case 'flashcards':
+                    title.textContent = 'بطاقات تعليمية';
+                    renderFlashcards(body);
+                    break;
+                case 'sorting':
+                    title.textContent = 'رتّب الخطوات';
+                    renderSortingGame(body);
+                    break;
+            }
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // ==================== QUIZ ====================
+        function renderQuiz(container) {
+            state.quizState = { currentQuestion: 0, score: 0, answers: [] };
+            
+            container.innerHTML = `
+                <div id="quizContainer">
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm text-muted">السؤال <span id="questionNum">1</span> من ${quizQuestions.length}</span>
+                            <span class="badge bg-accent/10 text-accent">النقاط: <span id="quizScore">0</span></span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="quizProgress" style="width: ${(state.quizState.currentQuestion + 1) / quizQuestions.length * 100}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="questionArea">
+                        <!-- Question will be rendered here -->
+                    </div>
+                </div>
+            `;
+            
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = quizQuestions[state.quizState.currentQuestion];
+            const area = document.getElementById('questionArea');
+            
+            area.innerHTML = `
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold mb-6">${q.question}</h3>
+                    <div class="space-y-3" id="optionsContainer">
+                        ${q.options.map((opt, i) => `
+                            <button class="quiz-option w-full" data-index="${i}" onclick="selectAnswer(${i})">
+                                <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/10 ml-3 text-sm font-bold">${String.fromCharCode(1571 + i)}</span>
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+                <div id="feedbackArea"></div>
+            `;
+            
+            document.getElementById('questionNum').textContent = state.quizState.currentQuestion + 1;
+        }
+
+        function selectAnswer(index) {
+            const q = quizQuestions[state.quizState.currentQuestion];
+            const options = document.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedbackArea');
+            
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[index].classList.add('selected');
+            
+            setTimeout(() => {
+                options.forEach((opt, i) => {
+                    opt.onclick = null;
+                    if (i === q.correct) {
+                        opt.classList.add('correct');
+                    } else if (i === index && index !== q.correct) {
+                        opt.classList.add('wrong');
+                    }
+                });
+                
+                if (index === q.correct) {
+                    state.quizState.score++;
+                    feedback.innerHTML = `
+                        <div class="p-4 rounded-xl bg-success/20 border border-success/30 text-success flex items-center gap-3 mt-4">
+                            <span class="text-2xl">🎉</span>
+                            <span class="font-bold">إجابة صحيحة! أحسنت!</span>
+                        </div>
+                    `;
+                } else {
+                    feedback.innerHTML = `
+                        <div class="p-4 rounded-xl bg-coral/20 border border-coral/30 text-coral flex items-center gap-3 mt-4">
+                            <span class="text-2xl">😔</span>
+                            <span>الإجابة الصحيحة هي: <strong>${q.options[q.correct]}</strong></span>
+                        </div>
+                    `;
+                }
+                
+                document.getElementById('quizScore').textContent = state.quizState.score;
+                
+                setTimeout(() => {
+                    state.quizState.currentQuestion++;
+                    if (state.quizState.currentQuestion < quizQuestions.length) {
+                        document.getElementById('quizProgress').style.width = `${(state.quizState.currentQuestion + 1) / quizQuestions.length * 100}%`;
+                        renderQuestion();
+                    } else {
+                        showQuizResults();
+                    }
+                }, 1500);
+            }, 500);
+        }
+
+        function showQuizResults() {
+            const container = document.getElementById('quizContainer');
+            const percentage = Math.round((state.quizState.score / quizQuestions.length) * 100);
+            
+            state.progress.quiz = percentage;
+            saveProgress();
+            updateProgressUI();
+            
+            let message, emoji;
+            if (percentage >= 80) {
+                message = 'ممتاز! أنت خبير في الذكاء الاصطناعي!';
+                emoji = '🏆';
+                createConfetti();
+            } else if (percentage >= 60) {
+                message = 'جيد جداً! استمر في التعلم!';
+                emoji = '🌟';
+            } else {
+                message = 'حاول مرة أخرى! المرPractice يجعلك أفضل!';
+                emoji = '💪';
+            }
+            
+            container.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="text-6xl mb-4">${emoji}</div>
+                    <h3 class="text-2xl font-bold mb-2">انتهى الاختبار!</h3>
+                    <p class="text-muted mb-6">${message}</p>
+                    <div class="text-5xl font-black text-accent mb-2">${state.quizState.score}/${quizQuestions.length}</div>
+                    <p class="text-muted mb-8">نسبة النجاح: ${percentage}%</p>
+                    <button onclick="renderQuiz(document.getElementById('modalBody'))" class="btn-primary">
+                        إعادة الاختبار
+                    </button>
+                </div>
+            `;
+        }
+
+        // ==================== MATCHING GAME ====================
+        function renderMatchingGame(container) {
+            state.matchingState = { selected: null, matches: [], attempts: 0 };
+            
+            const terms = matchingPairs.map((p, i) => ({ ...p, id: `term-${i}`, type: 'term' }));
+            const defs = matchingPairs.map((p, i) => ({ ...p, id: `def-${i}`, type: 'def', matchId: `term-${i}` }));
+            
+            const shuffledTerms = shuffleArray([...terms]);
+            const shuffledDefs = shuffleArray([...defs]);
+            
+            container.innerHTML = `
+                <div class="mb-4 text-center">
+                    <span class="text-muted">المطابقات: <span id="matchCount">0</span>/${matchingPairs.length}</span>
+                </div>
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-bold mb-4 text-center text-accent">المصطلحات</h4>
+                        <div class="flex flex-wrap gap-3 justify-center" id="termsContainer">
+                            ${shuffledTerms.map(t => `
+                                <div class="match-card" data-id="${t.id}" data-type="term" onclick="selectMatchCard(this)">
+                                    ${t.term}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-4 text-center text-warm">التعريفات</h4>
+                        <div class="flex flex-wrap gap-3 justify-center" id="defsContainer">
+                            ${shuffledDefs.map(d => `
+                                <div class="match-card" data-id="${d.id}" data-type="def" data-match="${d.matchId}" onclick="selectMatchCard(this)">
+                                    ${d.def}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                <div id="matchFeedback" class="mt-6 text-center"></div>
+            `;
+        }
+
+        function selectMatchCard(card) {
+            if (card.classList.contains('matched')) return;
+            
+            const selected = document.querySelector('.match-card.selected');
+            
+            if (selected) {
+                if (selected === card) {
+                    selected.classList.remove('selected');
+                    state.matchingState.selected = null;
+                    return;
+                }
+                
+                const isMatch = checkMatch(selected, card);
+                state.matchingState.attempts++;
+                
+                if (isMatch) {
+                    selected.classList.remove('selected');
+                    selected.classList.add('matched');
+                    card.classList.add('matched');
+                    state.matchingState.matches.push(true);
+                    
+                    document.getElementById('matchCount').textContent = state.matchingState.matches.length;
+                    
+                    if (state.matchingState.matches.length === matchingPairs.length) {
+                        state.progress.matching = 100;
+                        saveProgress();
+                        updateProgressUI();
+                        createConfetti();
+                        document.getElementById('matchFeedback').innerHTML = `
+                            <div class="p-4 rounded-xl bg-success/20 border border-success/30 text-success">
+                                🎉 أحسنت! أكملت جميع المطابقات!
+                            </div>
+                        `;
+                    }
+                } else {
+                    selected.classList.add('wrong');
+                    card.classList.add('wrong');
+                    
+                    setTimeout(() => {
+                        selected.classList.remove('selected', 'wrong');
+                        card.classList.remove('wrong');
+                    }, 500);
+                }
+                
+                state.matchingState.selected = null;
+            } else {
+                card.classList.add('selected');
+                state.matchingState.selected = card;
+            }
+        }
+
+        function checkMatch(card1, card2) {
+            const type1 = card1.dataset.type;
+            const type2 = card2.dataset.type;
+            
+            if (type1 === type2) return false;
+            
+            const termCard = type1 === 'term' ? card1 : card2;
+            const defCard = type1 === 'def' ? card1 : card2;
+            
+            return defCard.dataset.match === termCard.dataset.id;
+        }
+
+        // ==================== FLASHCARDS ====================
+        function renderFlashcards(container) {
+            state.flashcardState = { currentIndex: 0, flipped: false };
+            
+            container.innerHTML = `
+                <div class="text-center">
+                    <div class="mb-4 text-muted">
+                        البطاقة <span id="cardNum">1</span> من ${flashcardsData.length}
+                    </div>
+                    
+                    <div class="flash-card flash-card-inner relative w-full max-w-md mx-auto aspect-[3/2] cursor-pointer" 
+                         id="flashcard" onclick="flipCard()">
+                        <div class="flash-card-front glass-card w-full h-full flex items-center justify-center p-8">
+                            <div>
+                                <div class="text-sm text-accent mb-2">الوجه الأمامي</div>
+                                <p class="text-xl font-bold" id="cardFront">${flashcardsData[0].front}</p>
+                            </div>
+                        </div>
+                        <div class="flash-card-back glass-card w-full h-full flex items-center justify-center p-8 bg-success/10 border-success/30">
+                            <div>
+                                <div class="text-sm text-success mb-2">الوجه الخلفي</div>
+                                <p class="text-lg" id="cardBack">${flashcardsData[0].back}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-sm text-muted mt-4">اضغط على البطاقة لقلبها</p>
+                    
+                    <div class="flex justify-center gap-4 mt-6">
+                        <button onclick="prevCard()" class="btn-secondary" ${state.flashcardState.currentIndex === 0 ? 'disabled' : ''}>
+                            السابقة
+                        </button>
+                        <button onclick="nextCard()" class="btn-primary">
+                            التالية
+                        </button>
+                    </div>
+                    
+                    <div class="flex justify-center gap-2 mt-6" id="cardDots">
+                        ${flashcardsData.map((_, i) => `
+                            <button class="w-3 h-3 rounded-full ${i === 0 ? 'bg-accent' : 'bg-white/20'}" onclick="goToCard(${i})"></button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function flipCard() {
+            const card = document.getElementById('flashcard');
+            card.classList.toggle('flipped');
+            state.flashcardState.flipped = !state.flashcardState.flipped;
+            
+            if (state.flashcardState.flipped) {
+                state.progress.flashcards = Math.max(state.progress.flashcards, Math.round(((state.flashcardState.currentIndex + 1) / flashcardsData.length) * 100));
+                saveProgress();
+                updateProgressUI();
+            }
+        }
+
+        function nextCard() {
+            if (state.flashcardState.currentIndex < flashcardsData.length - 1) {
+                state.flashcardState.currentIndex++;
+                state.flashcardState.flipped = false;
+                updateFlashcard();
+            }
+        }
+
+        function prevCard() {
+            if (state.flashcardState.currentIndex > 0) {
+                state.flashcardState.currentIndex--;
+                state.flashcardState.flipped = false;
+                updateFlashcard();
+            }
+        }
+
+        function goToCard(index) {
+            state.flashcardState.currentIndex = index;
+            state.flashcardState.flipped = false;
+            updateFlashcard();
+        }
+
+        function updateFlashcard() {
+            const card = document.getElementById('flashcard');
+            card.classList.remove('flipped');
+            
+            setTimeout(() => {
+                document.getElementById('cardFront').textContent = flashcardsData[state.flashcardState.currentIndex].front;
+                document.getElementById('cardBack').textContent = flashcardsData[state.flashcardState.currentIndex].back;
+                document.getElementById('cardNum').textContent = state.flashcardState.currentIndex + 1;
+                
+                document.querySelectorAll('#cardDots button').forEach((dot, i) => {
+                    dot.className = `w-3 h-3 rounded-full ${i === state.flashcardState.currentIndex ? 'bg-accent' : 'bg-white/20'}`;
+                });
+            }, 100);
+        }
+
+        // ==================== SORTING GAME ====================
+        function renderSortingGame(container) {
+            const shuffled = shuffleArray([...registrationStepsData]);
+            
+            container.innerHTML = `
+                <div class="mb-4 text-center">
+                    <p class="text-muted">رتّب خطوات التسجيل في ChatGPT بالترتيب الصحيح</p>
+                </div>
+                <div class="space-y-3" id="sortableContainer">
+                    ${shuffled.map((s, i) => `
+                        <div class="sortable-item p-4 rounded-xl bg-white/[0.03] border border-white/10 cursor-pointer hover:border-accent/50 transition-all flex items-center gap-4"
+                             draggable="true" data-step="${s.step}"
+                             ondragstart="handleDragStart(event)"
+                             ondragover="handleDragOver(event)"
+                             ondrop="handleDrop(event)">
+                            <span class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm font-bold order-handle">☰</span>
+                            <span class="flex-1">${s.text}</span>
+                            <span class="badge bg-accent/10 text-accent">الخطوة ${s.step}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="mt-6 text-center">
+                    <button onclick="checkSorting()" class="btn-primary">تحقق من الترتيب</button>
+                </div>
+                <div id="sortingFeedback" class="mt-4"></div>
+            `;
+        }
+
+        let draggedItem = null;
+
+        function handleDragStart(e) {
+            draggedItem = e.target.closest('.sortable-item');
+            draggedItem.classList.add('opacity-50');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            const item = e.target.closest('.sortable-item');
+            if (item && item !== draggedItem) {
+                const rect = item.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                if (e.clientY < midY) {
+                    item.parentNode.insertBefore(draggedItem, item);
+                } else {
+                    item.parentNode.insertBefore(draggedItem, item.nextSibling);
+                }
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            if (draggedItem) {
+                draggedItem.classList.remove('opacity-50');
+                draggedItem = null;
+            }
+        }
+
+        function checkSorting() {
+            const items = document.querySelectorAll('.sortable-item');
+            let correct = 0;
+            
+            items.forEach((item, index) => {
+                const step = parseInt(item.dataset.step);
+                if (step === index + 1) {
+                    item.classList.add('border-success', 'bg-success/10');
+                    item.classList.remove('border-white/10');
+                    correct++;
+                } else {
+                    item.classList.add('border-coral', 'bg-coral/10');
+                    item.classList.remove('border-white/10');
+                }
+            });
+            
+            const percentage = Math.round((correct / registrationStepsData.length) * 100);
+            state.progress.sorting = percentage;
+            saveProgress();
+            updateProgressUI();
+            
+            const feedback = document.getElementById('sortingFeedback');
+            if (percentage === 100) {
+                feedback.innerHTML = `<div class="p-4 rounded-xl bg-success/20 border border-success/30 text-success text-center">🎉 ممتاز! الترتيب صحيح 100%!</div>`;
+                createConfetti();
+            } else {
+                feedback.innerHTML = `<div class="p-4 rounded-xl bg-coral/20 border border-coral/30 text-coral text-center">حصلت على ${correct} من ${registrationStepsData.length} صحيحة. حاول مرة أخرى!</div>`;
+            }
+        }
+
+        // ==================== EMOTIONS ====================
+        function selectEmotion(emoji, color) {
+            state.currentEmotion = emoji;
+            document.getElementById('currentEmotion').textContent = emoji;
+            document.querySelectorAll('.emotion-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`[data-emotion="${emoji}"]`).classList.add('active');
+            closeModal('emotionModal');
+        }
+
+        document.getElementById('emotionToggle').addEventListener('click', () => {
+            openModal('emotionModal');
+        });
+
+        // ==================== PROGRESS ====================
+        function loadProgress() {
+            const saved = localStorage.getItem('aiLearningProgress');
+            if (saved) {
+                state.progress = JSON.parse(saved);
+            }
+        }
+
+        function saveProgress() {
+            localStorage.setItem('aiLearningProgress', JSON.stringify(state.progress));
+        }
+
+        function updateProgressUI() {
+            const weights = {
+                intro: 10,
+                chatgpt: 15,
+                tips: 15,
+                images: 10,
+                quizgecko: 15,
+                quiz: 15,
+                matching: 10,
+                flashcards: 5,
+                sorting: 5
+            };
+            
+            let total = 0;
+            let possible = 0;
+            
+            Object.keys(weights).forEach(key => {
+                possible += weights[key];
+                if (typeof state.progress[key] === 'boolean') {
+                    total += state.progress[key] ? weights[key] : 0;
+                } else {
+                    total += (state.progress[key] / 100) * weights[key];
+                }
+            });
+            
+            const percentage = Math.round((total / possible) * 100);
+            
+            document.getElementById('navProgressBar').style.width = `${percentage}%`;
+            document.getElementById('navProgressText').textContent = `${percentage}%`;
+            
+            if (document.getElementById('totalProgressBar')) {
+                document.getElementById('totalProgressBar').style.width = `${percentage}%`;
+                document.getElementById('totalProgressText').textContent = `${percentage}%`;
+            }
+            
+            updateAchievement(percentage);
+        }
+
+        function showProgressSection() {
+            const section = document.getElementById('progressSection');
+            section.classList.remove('hidden');
+            scrollToSection('progressSection');
+            renderProgressItems();
+        }
+
+        function renderProgressItems() {
+            const container = document.getElementById('progressItems');
+            const items = [
+                { key: 'intro', label: 'قراءة التمهيد', icon: '📖' },
+                { key: 'chatgpt', label: 'معرفة مزايا ChatGPT', icon: '🤖' },
+                { key: 'tips', label: 'قراءة التنبيهات', icon: '💡' },
+                { key: 'images', label: 'توليد الصور', icon: '🎨' },
+                { key: 'quizgecko', label: 'Quiz Gecko', icon: '📝' },
+                { key: 'quiz', label: 'الاختبار التفاعلي', icon: '🎯', isPercent: true },
+                { key: 'matching', label: 'لعبة المطابقة', icon: '🔗', isPercent: true },
+                { key: 'flashcards', label: 'البطاقات التعليمية', icon: '🃏', isPercent: true },
+                { key: 'sorting', label: 'رتّب الخطوات', icon: '📋', isPercent: true }
+            ];
+            
+            container.innerHTML = items.map(item => {
+                const value = state.progress[item.key];
+                const completed = item.isPercent ? value >= 100 : value;
+                const percentValue = item.isPercent ? value : (value ? 100 : 0);
+                
+                return `
+                    <div class="flex items-center gap-4 p-3 rounded-xl bg-white/[0.03]">
+                        <span class="text-2xl">${item.icon}</span>
+                        <span class="flex-1">${item.label}</span>
+                        <div class="w-24 progress-container">
+                            <div class="progress-bar" style="width: ${percentValue}%"></div>
+                        </div>
+                        <span class="text-sm font-bold ${completed ? 'text-success' : 'text-muted'}">${percentValue}%</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateAchievement(percentage) {
+            const achievementEmoji = document.getElementById('achievementEmoji');
+            const achievementTitle = document.getElementById('achievementTitle');
+            const achievementDesc = document.getElementById('achievementDesc');
+            
+            if (percentage >= 100) {
+                achievementEmoji.textContent = '🏆';
+                achievementTitle.textContent = 'بطل الذكاء الاصطناعي!';
+                achievementDesc.textContent = 'لقد أكملت جميع المحتوى والأنشطة بنجاح!';
+            } else if (percentage >= 75) {
+                achievementEmoji.textContent = '🌟';
+                achievementTitle.textContent = 'متقدم ممتاز!';
+                achievementDesc.textContent = 'أنت قريب جداً من إكمال الرحلة!';
+            } else if (percentage >= 50) {
+                achievementEmoji.textContent = '🚀';
+                achievementTitle.textContent = 'في الطريق الصحيح!';
+                achievementDesc.textContent = 'استمر في التعلم والاستكشاف!';
+            } else if (percentage >= 25) {
+                achievementEmoji.textContent = '💪';
+                achievementTitle.textContent = 'بداية جيدة!';
+                achievementDesc.textContent = 'استمر في قراءة المحتوى!';
+            } else {
+                achievementEmoji.textContent = '🌱';
+                achievementTitle.textContent = 'ابدأ رحلتك!';
+                achievementDesc.textContent = 'اكتشف عالم الذكاء الاصطناعي!';
+            }
+        }
+
+        // ==================== UTILITIES ====================
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function createConfetti() {
+            const colors = ['#00d9ff', '#f4a261', '#2ec4b6', '#e9c46a', '#e76f51'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-piece';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 3500);
+            }
+        }
+
+        // ==================== SCROLL REVEAL ====================
+        function initScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            
+            document.querySelectorAll('.reveal-section').forEach(el => observer.observe(el));
+            document.querySelectorAll('.stagger-children').forEach(el => observer.observe(el));
+        }
+    </script>
+</body>
+</html>
